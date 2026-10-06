@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GedGed Pharma | Paramètres</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-sans text-gray-800 flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 shrink-0 bg-gray-900 text-white flex flex-col hidden md:flex">
+        <div class="h-16 shrink-0 flex items-center px-6 border-b border-gray-800">
+            <i class="fa-solid fa-pills text-emerald-500 text-xl mr-3"></i>
+            <span class="text-lg font-bold tracking-wide">GedGed Pharma</span>
+        </div>
+        <nav class="flex-1 px-4 py-4 space-y-1">
+            <a href="{% url 'index' %}" class="flex items-center px-4 py-2.5 text-gray-400 hover:text-white hover:bg-gray-800 rounded-xl font-medium transition">
+                <i class="fa-solid fa-chart-line w-5 mr-3"></i> Prévisions
+            </a>
+            <a href="{% url 'historique' %}" class="flex items-center px-4 py-2.5 text-gray-400 hover:text-white hover:bg-gray-800 rounded-xl font-medium transition">
+                <i class="fa-solid fa-box-open w-5 mr-3"></i> Historique
+            </a>
+            <a href="{% url 'parametres' %}" class="flex items-center px-4 py-2.5 bg-gray-800 text-emerald-400 rounded-xl font-medium transition">
+                <i class="fa-solid fa-gear w-5 mr-3"></i> Paramètres
+            </a>
+        </nav>
+        <div class="p-4 border-t border-gray-800 text-xs text-gray-500 shrink-0">
+            Pharmacie Centrale • Ben Guerir
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        
+        <!-- Form wrapper to make save button functional -->
+        <form method="POST" class="flex-1 flex flex-col h-screen overflow-hidden">
+            {% csrf_token %}
+            
+            <!-- Header -->
+            <header class="h-16 shrink-0 bg-white border-b border-gray-200 flex items-center justify-between px-6 shadow-sm">
+                <h1 class="text-lg md:text-xl font-semibold text-gray-800 truncate pr-4">Paramètres du Système</h1>
+                <button type="submit" class="shrink-0 whitespace-nowrap bg-gray-900 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-black transition shadow-sm">
+                    Enregistrer les modifications
+                </button>
+            </header>
+
+            <!-- Compressed Content Area -->
+            <div class="flex-1 overflow-y-auto p-6">
+                
+                {% if messages %}
+                <div class="mb-6 max-w-6xl">
+                    {% for message in messages %}
+                        <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl text-sm font-medium">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl">
+                    
+                    <!-- Section 1: Profil Pharmacie -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                        <h2 class="font-semibold text-gray-800 text-sm mb-4 border-b border-gray-100 pb-2"><i class="fa-solid fa-store mr-2 text-gray-400"></i>Profil de l'Établissement</h2>
+                        <div class="space-y-4 text-sm">
+                            <div>
+                                <label class="block text-gray-500 font-medium mb-1 text-xs">Nom de la Pharmacie</label>
+                                <input type="text" name="nom_pharmacie" value="{{ nom_pharmacie }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-500 font-medium mb-1 text-xs">Ville</label>
+                                    <input type="text" name="ville" value="{{ ville }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-500 font-medium mb-1 text-xs">Téléphone</label>
+                                    <input type="text" name="telephone" value="{{ telephone }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Algorithme OR (Operations Research) -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-emerald-500">
+                        <h2 class="font-semibold text-gray-800 text-sm mb-4 border-b border-gray-100 pb-2"><i class="fa-solid fa-calculator mr-2 text-emerald-500"></i>Configuration du Moteur Prédictif</h2>
+                        <div class="space-y-4 text-sm">
+                            <div>
+                                <label class="block text-gray-500 font-medium mb-1 text-xs">Taux de Service Cible (Ratio Critique)</label>
+                                <select name="taux_service" class="w-full border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition">
+                                    <option>Agressif (90% - Minimise les pertes)</option>
+                                    <option selected>Équilibré (95% - Recommandé)</option>
+                                    <option>Conservateur (99% - Zéro rupture garantie)</option>
+                                </select>
+                                <p class="text-[10px] text-gray-400 mt-1">Définit la tolérance statistique aux ruptures vs dates d'expiration.</p>
+                            </div>
+                            <div>
+                                <label class="block text-gray-500 font-medium mb-1 text-xs">Délai de Livraison Fournisseur par Défaut (Jours)</label>
+                                <input type="number" name="delai" value="{{ delai }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Alertes & Notifications -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 lg:col-span-2">
+                        <h2 class="font-semibold text-gray-800 text-sm mb-4 border-b border-gray-100 pb-2"><i class="fa-solid fa-bell mr-2 text-gray-400"></i>Préférences de Notification</h2>
+                        <div class="space-y-3">
+                            <label class="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">Alertes de Rupture Imminente</p>
+                                    <p class="text-xs text-gray-500">Recevoir une alerte quand un stock atteint le Seuil de Réapprovisionnement (ROP).</p>
+                                </div>
+                                <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                    <input type="checkbox" name="toggle1" id="toggle1" checked class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer border-emerald-500" style="right: 0;"/>
+                                    <label for="toggle1" class="toggle-label block overflow-hidden h-5 rounded-full bg-emerald-500 cursor-pointer"></label>
+                                </div>
+                            </label>
+                            
+                            <label class="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">Génération Automatique de Bons de Commande</p>
+                                    <p class="text-xs text-gray-500">Pré-remplir les bons de commande fournisseur en arrière-plan.</p>
+                                </div>
+                                <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                    <input type="checkbox" name="toggle2" id="toggle2" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300"/>
+                                    <label for="toggle2" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <!-- Basic CSS for the Toggle Switches -->
+    <style>
+        .toggle-checkbox:checked { right: 0; border-color: #10b981; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #10b981; }
+        .toggle-checkbox { right: 20px; transition: all 0.3s; }
+        .toggle-label { transition: all 0.3s; }
+    </style>
+</body>
+</html>
